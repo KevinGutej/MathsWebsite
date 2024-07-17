@@ -15,6 +15,7 @@ header {
 nav ul {
     list-style: none;
     padding: 0;
+    text-align: center;
 }
 
 nav ul li {
@@ -30,6 +31,7 @@ nav ul li a {
 
 main {
     padding: 20px;
+    text-align: center;
 }
 
 .content-section {
@@ -38,4 +40,26 @@ main {
 
 .content-section.active {
     display: block;
+}
+
+footer {
+    text-align: center;
+    padding: 10px;
+    background-color: #333;
+    color: white;
+    position: fixed;
+    bottom: 0;
+    width: 100%;
+}
+
+button {
+    margin-top: 20px;
+    padding: 10px 20px;
+    font-size: 16px;
+    cursor: pointer;
+}
+
+input[type="text"] {
+    padding: 5px;
+    font-size: 16px;
 }
