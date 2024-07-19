@@ -1,11 +1,12 @@
 let score = 0;
+let username = '';
+let users = {};
 
 function showSection(sectionId) {
     const sections = document.querySelectorAll('.content-section');
     sections.forEach(section => {
         section.classList.remove('active');
     });
-
     const activeSection = document.getElementById(sectionId);
     if (activeSection) {
         activeSection.classList.add('active');
@@ -13,12 +14,26 @@ function showSection(sectionId) {
 }
 
 document.addEventListener('DOMContentLoaded', () => {
-    showSection('arithmetic');
-    generateArithmeticQuestion();
-    generateAlgebraQuestion();
-    generateGeometryQuestion();
-    generateCalculusQuestion();
+    showSection('login');
 });
+
+function handleLogin(event) {
+    event.preventDefault();
+    username = document.getElementById('username').value;
+    const password = document.getElementById('password').value;
+
+    if (!users[username]) {
+        users[username] = { password: password, score: 0 };
+    }
+
+    if (users[username].password === password) {
+        score = users[username].score;
+        document.getElementById('score').textContent = score;
+        showSection('arithmetic');
+    } else {
+        document.getElementById('login-message').textContent = 'Invalid username or password';
+    }
+}
 
 function generateArithmeticQuestion() {
     const questionContainer = document.getElementById('arithmetic-questions');
@@ -105,6 +120,8 @@ function checkAnswer(section, correctAnswer) {
     }
 
     document.getElementById('score').textContent = score;
+    users[username].score = score;
+
     switch (section) {
         case 'arithmetic':
             generateArithmeticQuestion();
@@ -120,3 +137,20 @@ function checkAnswer(section, correctAnswer) {
             break;
     }
 }
+
+function displayLeaderboard() {
+    const leaderboardContent = document.getElementById('leaderboard-content');
+    leaderboardContent.innerHTML = '<h3>Leaderboard</h3>';
+    const sortedUsers = Object.keys(users).sort((a, b) => users[b].score - users[a].score);
+    sortedUsers.forEach(user => {
+        const userScore = users[user].score;
+        leaderboardContent.innerHTML += `<p>${user}: ${userScore}</p>`;
+    });
+}
+
+function showLeaderboard() {
+    showSection('leaderboard');
+    displayLeaderboard();
+}
+
+document.querySelector('nav ul').innerHTML += `<li><a href="#" onclick="showLeaderboard()">Leaderboard</a></li>`;
