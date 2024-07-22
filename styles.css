@@ -71,6 +71,19 @@ form {
     max-width: 300px;
 }
 
-#login-message {
+#login-message, #register-message {
     color: red;
+}
+
+#profile-username, #profile-score {
+    font-size: 20px;
+    margin: 10px 0;
+}
+
+#achievements {
+    margin: 20px 0;
+}
+
+#achievements p {
+    margin: 5px 0;
 }

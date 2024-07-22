@@ -1,22 +1,26 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Advanced Math Questions</title>
     <link rel="stylesheet" href="styles.css">
 </head>
+
 <body>
     <header>
         <h1>Advanced Math Questions</h1>
         <nav>
             <ul>
                 <li><a href="#" onclick="showSection('login')">Login</a></li>
+                <li><a href="#" onclick="showSection('register')">Register</a></li>
                 <li><a href="#" onclick="showSection('arithmetic')">Arithmetic</a></li>
                 <li><a href="#" onclick="showSection('algebra')">Algebra</a></li>
                 <li><a href="#" onclick="showSection('geometry')">Geometry</a></li>
                 <li><a href="#" onclick="showSection('calculus')">Calculus</a></li>
-                <li><a href="#" onclick="showSection('leaderboard')">Leaderboard</a></li>
+                <li><a href="#" onclick="showSection('profile')">Profile</a></li>
+                <li><a href="#" onclick="showLeaderboard()">Leaderboard</a></li>
             </ul>
         </nav>
     </header>
@@ -30,25 +34,52 @@
             </form>
             <p id="login-message"></p>
         </section>
+        <section id="register" class="content-section">
+            <h2>Register</h2>
+            <form id="register-form" onsubmit="return handleRegister(event)">
+                <input type="text" id="reg-username" placeholder="Username" required>
+                <input type="password" id="reg-password" placeholder="Password" required>
+                <button type="submit">Register</button>
+            </form>
+            <p id="register-message"></p>
+        </section>
         <section id="arithmetic" class="content-section">
             <h2>Arithmetic Questions</h2>
             <div id="arithmetic-questions"></div>
             <button onclick="generateArithmeticQuestion()">Next Question</button>
+            <p id="arithmetic-hint"></p>
+            <button onclick="showHint('arithmetic')">Show Hint</button>
+            <p id="arithmetic-explanation"></p>
         </section>
         <section id="algebra" class="content-section">
             <h2>Algebra Questions</h2>
             <div id="algebra-questions"></div>
             <button onclick="generateAlgebraQuestion()">Next Question</button>
+            <p id="algebra-hint"></p>
+            <button onclick="showHint('algebra')">Show Hint</button>
+            <p id="algebra-explanation"></p>
         </section>
         <section id="geometry" class="content-section">
             <h2>Geometry Questions</h2>
             <div id="geometry-questions"></div>
             <button onclick="generateGeometryQuestion()">Next Question</button>
+            <p id="geometry-hint"></p>
+            <button onclick="showHint('geometry')">Show Hint</button>
+            <p id="geometry-explanation"></p>
         </section>
         <section id="calculus" class="content-section">
             <h2>Calculus Questions</h2>
             <div id="calculus-questions"></div>
             <button onclick="generateCalculusQuestion()">Next Question</button>
+            <p id="calculus-hint"></p>
+            <button onclick="showHint('calculus')">Show Hint</button>
+            <p id="calculus-explanation"></p>
+        </section>
+        <section id="profile" class="content-section">
+            <h2>Profile</h2>
+            <p id="profile-username"></p>
+            <p id="profile-score"></p>
+            <div id="achievements"></div>
         </section>
         <section id="leaderboard" class="content-section">
             <h2>Leaderboard</h2>
@@ -60,4 +91,5 @@
     </footer>
     <script src="script.js"></script>
 </body>
+
 </html>
