@@ -20,7 +20,9 @@
                 <li><a href="#" onclick="showSection('geometry')">Geometry</a></li>
                 <li><a href="#" onclick="showSection('calculus')">Calculus</a></li>
                 <li><a href="#" onclick="showSection('profile')">Profile</a></li>
+                <li><a href="#" onclick="showSection('daily-challenges')">Daily Challenges</a></li>
                 <li><a href="#" onclick="showLeaderboard()">Leaderboard</a></li>
+                <li><a href="#" onclick="toggleDarkMode()">Toggle Dark Mode</a></li>
             </ul>
         </nav>
     </header>
@@ -45,41 +47,92 @@
         </section>
         <section id="arithmetic" class="content-section">
             <h2>Arithmetic Questions</h2>
+            <label for="difficulty-arithmetic">Choose difficulty:</label>
+            <select id="difficulty-arithmetic" onchange="setDifficulty(this.value)">
+                <option value="easy">Easy</option>
+                <option value="medium">Medium</option>
+                <option value="hard">Hard</option>
+            </select>
+            <div id="progress-arithmetic" class="progress-bar">
+                <div></div>
+            </div>
+            <div id="timer">Time left: <span id="time">30</span> seconds</div>
             <div id="arithmetic-questions"></div>
             <button onclick="generateArithmeticQuestion()">Next Question</button>
             <p id="arithmetic-hint"></p>
-            <button onclick="showHint('arithmetic')">Show Hint</button>
+            <button onclick="showHint('arithmetic')">Show Hint (<span id="hint-count-arithmetic">3</span> left)</button>
             <p id="arithmetic-explanation"></p>
+            <div id="question-history-arithmetic"></div>
         </section>
         <section id="algebra" class="content-section">
             <h2>Algebra Questions</h2>
+            <label for="difficulty-algebra">Choose difficulty:</label>
+            <select id="difficulty-algebra" onchange="setDifficulty(this.value)">
+                <option value="easy">Easy</option>
+                <option value="medium">Medium</option>
+                <option value="hard">Hard</option>
+            </select>
+            <div id="progress-algebra" class="progress-bar">
+                <div></div>
+            </div>
+            <div id="timer">Time left: <span id="time">30</span> seconds</div>
             <div id="algebra-questions"></div>
             <button onclick="generateAlgebraQuestion()">Next Question</button>
             <p id="algebra-hint"></p>
-            <button onclick="showHint('algebra')">Show Hint</button>
+            <button onclick="showHint('algebra')">Show Hint (<span id="hint-count-algebra">3</span> left)</button>
             <p id="algebra-explanation"></p>
+            <div id="question-history-algebra"></div>
         </section>
         <section id="geometry" class="content-section">
             <h2>Geometry Questions</h2>
+            <label for="difficulty-geometry">Choose difficulty:</label>
+            <select id="difficulty-geometry" onchange="setDifficulty(this.value)">
+                <option value="easy">Easy</option>
+                <option value="medium">Medium</option>
+                <option value="hard">Hard</option>
+            </select>
+            <div id="progress-geometry" class="progress-bar">
+                <div></div>
+            </div>
+            <div id="timer">Time left: <span id="time">30</span> seconds</div>
             <div id="geometry-questions"></div>
             <button onclick="generateGeometryQuestion()">Next Question</button>
             <p id="geometry-hint"></p>
-            <button onclick="showHint('geometry')">Show Hint</button>
+            <button onclick="showHint('geometry')">Show Hint (<span id="hint-count-geometry">3</span> left)</button>
             <p id="geometry-explanation"></p>
+            <div id="question-history-geometry"></div>
         </section>
         <section id="calculus" class="content-section">
             <h2>Calculus Questions</h2>
+            <label for="difficulty-calculus">Choose difficulty:</label>
+            <select id="difficulty-calculus" onchange="setDifficulty(this.value)">
+                <option value="easy">Easy</option>
+                <option value="medium">Medium</option>
+                <option value="hard">Hard</option>
+            </select>
+            <div id="progress-calculus" class="progress-bar">
+                <div></div>
+            </div>
+            <div id="timer">Time left: <span id="time">30</span> seconds</div>
             <div id="calculus-questions"></div>
             <button onclick="generateCalculusQuestion()">Next Question</button>
             <p id="calculus-hint"></p>
-            <button onclick="showHint('calculus')">Show Hint</button>
+            <button onclick="showHint('calculus')">Show Hint (<span id="hint-count-calculus">3</span> left)</button>
             <p id="calculus-explanation"></p>
+            <div id="question-history-calculus"></div>
         </section>
         <section id="profile" class="content-section">
             <h2>Profile</h2>
+            <input type="file" id="profile-picture" onchange="uploadProfilePicture(event)">
             <p id="profile-username"></p>
             <p id="profile-score"></p>
+            <img id="profile-img" src="" alt="Profile Picture" style="display:none;">
             <div id="achievements"></div>
+        </section>
+        <section id="daily-challenges" class="content-section">
+            <h2>Daily Challenges</h2>
+            <div id="daily-challenges-content"></div>
+            <button onclick="startDailyChallenge()">Start Daily Challenge</button>
         </section>
         <section id="leaderboard" class="content-section">
             <h2>Leaderboard</h2>

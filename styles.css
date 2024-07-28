@@ -3,6 +3,7 @@ body {
     margin: 0;
     padding: 0;
     background-color: #f4f4f4;
+    color: #333;
 }
 
 header {
@@ -44,7 +45,7 @@ main {
 
 footer {
     text-align: center;
-    padding: 10px;
+    padding: 10px 0;
     background-color: #333;
     color: white;
     position: fixed;
@@ -53,37 +54,47 @@ footer {
 }
 
 button {
-    margin-top: 20px;
     padding: 10px 20px;
-    font-size: 16px;
+    margin: 10px;
     cursor: pointer;
 }
 
-input[type="text"], input[type="password"] {
-    padding: 5px;
-    font-size: 16px;
-    margin: 10px 0;
-    width: 80%;
+.progress-bar {
+    width: 100%;
+    background-color: #ddd;
 }
 
-form {
-    margin: 0 auto;
-    max-width: 300px;
+.progress-bar div {
+    height: 20px;
+    background-color: #4caf50;
+    width: 0;
 }
 
-#login-message, #register-message {
-    color: red;
-}
-
-#profile-username, #profile-score {
-    font-size: 20px;
+#profile-img {
+    width: 100px;
+    height: 100px;
+    border-radius: 50%;
     margin: 10px 0;
 }
 
-#achievements {
-    margin: 20px 0;
+body.dark-mode {
+    background-color: #121212;
+    color: #e0e0e0;
 }
 
-#achievements p {
-    margin: 5px 0;
+body.dark-mode header,
+body.dark-mode footer {
+    background-color: #1c1c1c;
+}
+
+body.dark-mode nav ul li a {
+    color: #e0e0e0;
+}
+
+body.dark-mode .progress-bar {
+    background-color: #333;
+}
+
+body.dark-mode .progress-bar div {
+    background-color: #4caf50;
 }
