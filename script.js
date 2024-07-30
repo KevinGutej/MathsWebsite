@@ -39,7 +39,7 @@ function handleRegister(event) {
     if (users[regUsername]) {
         document.getElementById('register-message').textContent = 'Username already exists';
     } else {
-        users[regUsername] = { password: regPassword, score: 0, achievements: [], history: [] };
+        users[regUsername] = { password: regPassword, score: 0, achievements: [], history: [], profilePicture: '', bio: '' };
         document.getElementById('register-message').textContent = 'Registration successful';
     }
 }
@@ -118,13 +118,12 @@ function generateAlgebraQuestion() {
     const num2 = Math.floor(Math.random() * 10) + 1;
     const correctAnswer = ((7 - num2) / num1).toFixed(2);
     const hint = `Solve for x in ${num1}x + ${num2} = 7`;
-    let choices = [];
 
     const question = `${num1}x + ${num2} = 7`;
 
-    choices.push(correctAnswer);
+    let choices = [correctAnswer];
     while (choices.length < 4) {
-        let choice = ((Math.random() * 20) - 10).toFixed(2);
+        let choice = (Math.random() * 10).toFixed(2);
         if (!choices.includes(choice)) {
             choices.push(choice);
         }
@@ -132,7 +131,7 @@ function generateAlgebraQuestion() {
     choices.sort(() => Math.random() - 0.5);
 
     questionContainer.innerHTML = `
-        <p>Solve for x: ${question}</p>
+        <p>${question}</p>
         ${choices.map(choice => `<button onclick="checkAnswer('algebra', ${correctAnswer}, '${hint}', ${choice})">${choice}</button>`).join('')}
     `;
 }
@@ -141,14 +140,13 @@ function generateGeometryQuestion() {
     startTimer();
     const questionContainer = document.getElementById('geometry-questions');
     questionContainer.innerHTML = '';
-    const radius = Math.floor(Math.random() * 10) + 1;
-    const correctAnswer = (Math.PI * radius * radius).toFixed(2);
-    const hint = `Use the formula for the area of a circle: πr² where r is the radius`;
-    let choices = [];
+    const side = Math.floor(Math.random() * 10) + 1;
+    const correctAnswer = (side * side).toFixed(2);
+    const hint = `Area of a square: side^2`;
 
-    const question = `What is the area of a circle with radius ${radius}?`;
+    const question = `What is the area of a square with side length ${side}?`;
 
-    choices.push(correctAnswer);
+    let choices = [correctAnswer];
     while (choices.length < 4) {
         let choice = (Math.random() * 100).toFixed(2);
         if (!choices.includes(choice)) {
@@ -167,12 +165,12 @@ function generateCalculusQuestion() {
     startTimer();
     const questionContainer = document.getElementById('calculus-questions');
     questionContainer.innerHTML = '';
-    const correctAnswer = 2;
-    const hint = `Differentiate the function f(x) = x² to find f'(x)`;
-    let choices = [2, 0, 1, 4];
+    const correctAnswer = 1;
+    const hint = `Derivative of x^2: 2x, at x=0`;
 
-    const question = `What is the derivative of x^2?`;
+    const question = `What is the derivative of x^2 at x = 0?`;
 
+    let choices = [correctAnswer, 0, 2, -1];
     choices.sort(() => Math.random() - 0.5);
 
     questionContainer.innerHTML = `
@@ -182,48 +180,24 @@ function generateCalculusQuestion() {
 }
 
 function checkAnswer(section, correctAnswer, hint, userAnswer) {
-    const explanationContainer = document.getElementById(`${section}-explanation`);
-    const hintContainer = document.getElementById(`${section}-hint`);
+    const isCorrect = userAnswer === correctAnswer;
 
-    if (parseFloat(userAnswer) === parseFloat(correctAnswer)) {
-        playSound('correct');
+    if (isCorrect) {
         alert('Correct!');
+        playSound('correct');
         score++;
-        users[username].score = score;
-        checkAchievements();
-        hintContainer.style.display = 'none';
-        explanationContainer.innerHTML = '';
-        questionHistory.push({ section, correctAnswer, userAnswer: 'Correct' });
+        document.getElementById(`${section}-explanation`).textContent = '';
     } else {
+        alert(`Incorrect! The correct answer was ${correctAnswer}.`);
         playSound('incorrect');
-        alert(`Incorrect. The correct answer was ${correctAnswer}`);
-        explanationContainer.innerHTML = `Explanation: ${hint}`;
-        questionHistory.push({ section, correctAnswer, userAnswer: 'Incorrect' });
+        document.getElementById(`${section}-explanation`).textContent = hint;
     }
 
-    document.getElementById('score').textContent = score;
+    questionHistory.push({ section, correctAnswer, userAnswer });
+    updateProgress(section);
+    updateQuestionHistory(section);
+    checkAchievements();
     saveUserData();
-    updateQuestionHistory();
-
-    switch (section) {
-        case 'arithmetic':
-            updateProgress('arithmetic');
-            break;
-        case 'algebra':
-            updateProgress('algebra');
-            break;
-        case 'geometry':
-            updateProgress('geometry');
-            break;
-        case 'calculus':
-            updateProgress('calculus');
-            break;
-    }
-}
-
-function playSound(type) {
-    const audio = new Audio(type === 'correct' ? 'correct.mp3' : 'incorrect.mp3');
-    audio.play();
 }
 
 function updateProgress(section) {
@@ -233,21 +207,36 @@ function updateProgress(section) {
     progressBar.style.width = `${progressPercentage}%`;
 }
 
+function playSound(type) {
+    const audio = new Audio(type === 'correct' ? 'correct.mp3' : 'incorrect.mp3');
+    audio.play();
+}
+
 function loadProfile() {
     document.getElementById('profile-username').textContent = `Username: ${username}`;
     document.getElementById('profile-score').textContent = `Score: ${score}`;
     const profileImg = document.getElementById('profile-img');
     const achievementsContainer = document.getElementById('achievements');
+    const profileBio = document.getElementById('profile-bio');
+
     achievementsContainer.innerHTML = '<h3>Achievements</h3>';
     
     users[username].achievements.forEach(achievement => {
         achievementsContainer.innerHTML += `<p>${achievement}</p>`;
     });
 
+    profileBio.value = users[username].bio || '';
+
     if (users[username].profilePicture) {
         profileImg.src = users[username].profilePicture;
         profileImg.style.display = 'block';
     }
+}
+
+function saveProfileBio() {
+    users[username].bio = document.getElementById('profile-bio').value;
+    alert('Bio saved successfully!');
+    saveUserData();
 }
 
 function checkAchievements() {
@@ -273,12 +262,14 @@ function uploadProfilePicture(event) {
     reader.readAsDataURL(file);
 }
 
-function updateQuestionHistory() {
-    const historyContainer = document.getElementById('question-history');
+function updateQuestionHistory(section) {
+    const historyContainer = document.getElementById(`question-history-${section}`);
     historyContainer.innerHTML = '<h3>Question History</h3>';
 
     questionHistory.forEach(item => {
-        historyContainer.innerHTML += `<p>${item.section}: ${item.userAnswer} (Correct Answer: ${item.correctAnswer})</p>`;
+        if (item.section === section) {
+            historyContainer.innerHTML += `<p>${item.section}: ${item.userAnswer} (Correct Answer: ${item.correctAnswer})</p>`;
+        }
     });
 }
 
@@ -300,6 +291,9 @@ function toggleDarkMode() {
 
 function startDailyChallenge() {
     alert('Complete the daily challenge to earn extra points!');
+    generateArithmeticQuestion();
+    document.getElementById('daily-challenge-question').innerHTML = document.getElementById('arithmetic-questions').innerHTML;
+    showSection('daily-challenges');
 }
 
 function showHint(section) {
@@ -321,6 +315,20 @@ function loadUserData() {
     if (data) {
         users = JSON.parse(data);
     }
+}
+
+function handleComment(event, section) {
+    event.preventDefault();
+    const commentInput = document.getElementById(`${section}-comment`);
+    const comment = commentInput.value;
+    const commentsContainer = document.getElementById(`${section}-comments`);
+
+    commentsContainer.innerHTML += `<p>${comment}</p>`;
+    commentInput.value = '';
+}
+
+function startLiveChat() {
+    alert('Starting live chat...');
 }
 
 loadUserData();
